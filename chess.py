@@ -5,6 +5,19 @@
 import numpy as np
 import pygame
 
+#common problems:
+#Boards sideways instead of up and down
+#Black and white are on the wrong side of the board
+#The white king and queen are in the wrong positions
+#It doesn't recognize checkmate
+#It lets you take into check
+#Pawns only move one square
+#No en passant
+#No castling
+#Crashes when you capture king
+#Not proper notation
+
+
 class chesspygame:
 	#every function manipulates the pygame window and input in some way
 	def __init__:
