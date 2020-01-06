@@ -64,8 +64,10 @@ class ChessBoard:
 
 			if self.board[self.index1].directionFacing == "North":
 				self.pawnIncrementValue = np.array((1,0))
-			if self.board[self.index1].directionFacing == "South":
+			elif self.board[self.index1].directionFacing == "South":
 				self.pawnIncrementValue = np.array((-1,0))
+			else:
+				pass	
 			#promotion
 
 
@@ -74,17 +76,14 @@ class ChessBoard:
 			#are eligble to take by en passant
 
 			#If Pawn.isEligbleForJumpMove is True, append the position of index + or - (0,2) to available moves
-			try:
-				if self.board[self.index1 + (0,1)].side != self.selectedSide and type(self.board[self.index1 + (0,1)]) == Pawn and self.board[self.index1 + (0,1)].moveJumpMoveWasTaken+1 == self.currentmove:
-					self.availableMoves.append(self.pawnIncrementValue + (0,1))
-			except:
-				pass
-
-			try:
-				if self.board[self.index1 + (0,-1)].side != self.selectedSide and type(self.board[self.index1 + (0,-1)]) == Pawn and self.board[self.index1 + (0,-1)].moveJumpMoveWasTaken+1 == self.currentmove:
-					self.availableMoves.append(self.pawnIncrementValue + (0,-1))
-			except:
-				pass
+			
+			list = [(0,1),(0,-1)]
+			for x in list:
+				try:
+					if self.board[self.index1 + x].side != self.selectedSide and type(self.board[self.index1 + x]) == Pawn and self.board[self.index1 + x].moveJumpMoveWasTaken+1 == self.currentmove:
+						self.availableMoves.append(self.pawnIncrementValue + x)
+				except:
+					pass
 
 			try:
 				if self.board[self.index1 + self.pawnIncrementValue] == Square:
@@ -100,115 +99,60 @@ class ChessBoard:
 		#############################################
 		if self.SelectedType == King:
 			#castling
+			#variables to be concerned about:
+			#occupiedByWhite
+			#occupiedbyBlack
+			#side
+			list = [(1,0),(0,1),(-1,0),(0,-1),(1,1),(1,-1),(-1,-1),(-1,1)]
+			
+			#first, check the object.side of self.board[index1]; check self.board[index1].side
+			#you want to check the object with index 'index1 + list'.side
+			#if the side of that object == self.board[index1].side, pass
+			#elif the side of that object != self.board[index1].side,
+			#check if it is occupied by that same side, and if it returns False, append 'index1+list' to self.availableMoves
+			#else, pass
+			for x in list:
+				try:
+					if self.board[self.index1 + x].side != self.board[self.index1].side:
+						if self.board[self.index1 + x].side == "white"
+						
+						self.board[self.index1 + x]
+					#also check if the object is "notoccupied" by the same side object
+					
+					
+					
+					
+					
 		#############################################
 		if self.SelectedType == Knight:
-			try:
-				if self.board[np.array(self.index1) + (2,1)].side != self.selectedSide:
-					self.availableMoves.append(np.array(self.index1) + (2,1))
-			except:
-				pass
-
-			try:
-				if self.board[np.array(self.index1) + (2,-1)].side != self.selectedSide:
-					self.availableMoves.append(np.array(self.index1) + (2,-1))
-			except:
-				pass
-
-			try:
-				if self.board[np.array(self.index1) + (1,2)].side != self.selectedSide:
-					self.availableMoves.append(np.array(self.index1) + (1,2))
-			except:
-				pass
-
-			try:
-				if self.board[np.array(self.index1) + (1,-2)].side != self.selectedSide:
-					self.availableMoves.append(np.array(self.index1) + (1,-2))
-			except:
-				pass
+			list = [(2,1),(2,-1),(1,2),(1,-2),(-2,1),(-2,-1),(-1,2),(-1,-2)]
 			
-			try:
-				if self.board[np.array(self.index1) + (-2,1)].side != self.selectedSide:
-					self.availableMoves.append(np.array(self.index1) + (-2,1))
-			except:
-				pass
-			
-			try:
-				if self.board[np.array(self.index1) + (-2,-1)].side != self.selectedSide:
-					self.availableMoves.append(np.array(self.index1) + (-2,-1))
-			except:
-				pass
-			
-			try:
-				if self.board[np.array(self.index1) + (-1,2)].side != self.selectedSide:
-					self.availableMoves.append(np.array(self.index1) + (-1,2))
-			except:
-				pass
-			
-			try:
-				if self.board[np.array(self.index1) + (-1,-2)].side != self.selectedSide:
-					self.availableMoves.append(np.array(self.index1) + (-1,-2))
-			except:
-				pass
+			for x in list:
+				try:
+					if self.board[np.array(self.index1) + x].side != self.selectedSide:
+						self.availableMoves.append(np.array(self.index1) + x)
+				except:
+					pass
 		
 		#############################################
 		if self.SelectedType == Bishop:
 			loopedindex = np.array(index1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
+			list = [(1,1),(1,-1),(-1,-1),(-1,1)]
+			for x in list:
+				while True:
+					try:
+						if type(self.Board[loopedindex]) == Square:
+							self.availableMoves.append(loopedindex)
+						elif self.selectedSide == self.Board[loopedindex].side:
+							break
+						elif self.selectedSide != self.Board[loopedindex.side]:
+							self.availableMoves.append(loopedindex)
+							break
+						else:
+							pass
+					except:
 						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (1,1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (1,-1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (-1,-1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (-1,1)
+					loopedindex = loopedindex + (1,1)
 		#############################################
 		if self.SelectedType == Rook:
 			#run 4 while loops. Each for loop goes in one direction, checking the object at each index. 
@@ -216,180 +160,43 @@ class ChessBoard:
 			#Else, If it gets to an index in which self.selectedSide == self.Board[loopedindex].side, terminate loop
 			#Else, If it gets to an index in which self.selectedSide != self.Board[loopedindex].side, append loopedindex to self.availableMoves, then break
 			loopedindex = np.array(index1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
+			list = [(1,0),(0,1),(-1,0),(0,-1)]
+			for x in list:
+				while True:
+					try:
+						if type(self.Board[loopedindex]) == Square:
+							self.availableMoves.append(loopedindex)
+						elif self.selectedSide == self.Board[loopedindex].side:
+							break
+						elif self.selectedSide != self.Board[loopedindex.side]:
+							self.availableMoves.append(loopedindex)
+							break
+						else:
+							pass
+					except:
 						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (1,0)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (0,1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex - (1,0)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex - (0,1)
+					loopedindex = loopedindex + x
 
 		#############################################
 		if self.SelectedType == Queen:
 			loopedindex = np.array(index1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
+			
+			list = [(1,0),(0,1),(-1,0),(0,-1),(1,1),(1,-1),(-1,-1),(-1,1)]
+			for x in list:
+				while True:
+					try:
+						if type(self.Board[loopedindex]) == Square:
+							self.availableMoves.append(loopedindex)
+						elif self.selectedSide == self.Board[loopedindex].side:
+							break
+						elif self.selectedSide != self.Board[loopedindex.side]:
+							self.availableMoves.append(loopedindex)
+							break
+						else:
+							pass
+					except:
 						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (0,1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (1,1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (1,0)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (1,-1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (0,-1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (-1,-1)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (-1,0)
-			while True:
-				try:
-					if type(self.Board[loopedindex]) == Square:
-						self.availableMoves.append(loopedindex)
-					elif self.selectedSide == self.Board[loopedindex].side:
-						break
-					elif self.selectedSide != self.Board[loopedindex.side]:
-						self.availableMoves.append(loopedindex)
-						break
-					else:
-						pass
-				except:
-					break
-				loopedindex = loopedindex + (-1,)
-		
-
+					loopedindex = loopedindex + x
 	def move(self,index1,index2):
 		#takes as input, index1 and index2, and attempts to move the object at index1 to index2
 		#index2 has to be under self.checkMoves() of self.index1
